@@ -7,4 +7,4 @@ app.include_router(router)
 
 @app.get("/")
 async def root():
-    return {"backend is running"}
+    return {"status: running"}

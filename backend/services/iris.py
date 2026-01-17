@@ -1,21 +1,46 @@
 from obspy import UTCDateTime
-from obspy.clients.fdsn import Client as FSDN_Client
-import matplotlib.pyplot as plt
+from obspy.clients.fdsn import Client
 
-client = FSDN_Client("IRIS")
+from app.models import Waveform
 
-network = "IU"
-station = "?"
-location = "00"
-channel = "BHZ"
-start_time = UTCDateTime("2026-01-01T00:00:00")
-end_time = UTCDateTime("2026-01-01T00:10:00")
 
-st = client.get_waveforms(
-    network=network,
-    station=station,
-    location=location,
-    channel=channel,
-    starttime=start_time,
-    endtime=end_time,
-)
+client = Client("IRIS")
+
+
+def get_waveform(
+    network: str,
+    station: str,
+    location: str,
+    channel: str,
+    start_time: str,
+    end_time: str,
+) -> None:
+
+    start = UTCDateTime(start_time)
+    end = UTCDateTime(end_time)
+
+    stream = client.get_waveforms(
+        network=network,
+        station=station,
+        location=location,
+        channel=channel,
+        starttime=start,
+        endtime=end,
+    )
+
+    print(len(stream))
+    trace = stream[0]
+
+    print(stream)
+    print(type(trace.data))
+    print(trace.data)
+    print(trace.stats)
+
+    return Waveform(
+        network=network,
+        station=station,
+        channel=channel,
+        startTime=trace.stats.starttime.isoformat(),
+        data=trace.data,
+        samplingRate=trace.stats.sampling_rate,
+    )
