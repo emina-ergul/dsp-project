@@ -13,11 +13,10 @@ def get_waveform(
     location: str,
     channel: str,
     start_time: str,
-    end_time: str,
+    duration_seconds: int,
 ) -> None:
-
     start = UTCDateTime(start_time)
-    end = UTCDateTime(end_time)
+    end = start + duration_seconds
 
     stream = client.get_waveforms(
         network=network,
