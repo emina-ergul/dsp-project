@@ -1,6 +1,6 @@
 import type { Waveform } from "../types";
 
-const backend_url = "http://127.0.0.1:8000";
+const backend_url = "http://localhost:8000";
 
 export async function fetchWaveform(
   network: string,
@@ -15,6 +15,6 @@ export async function fetchWaveform(
   if (!res.ok) {
     throw new Error(`Error fetching Iris waveform data: ${res.statusText}`);
   }
-
+  console.log(res.json());
   return res.json();
 }
